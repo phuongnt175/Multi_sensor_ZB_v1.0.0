@@ -11,14 +11,13 @@
 #include "ldr.h"
 #include "Source/Mid/kalman_filter/kalman_filter.h"
 
-
-
 EmberEventControl readValueSensorLightControl;
 volatile uint32_t registor;
 volatile uint32_t lux = 0;
 uint32_t valueADC=0;
 uint32_t valueLDR=0.0048828125;
 uint32_t kalman_Light=0;
+
 /**
  * @func    LDRInit
  * @brief   LDR initialize
@@ -70,10 +69,10 @@ void LDRInit(void)
 	  initSingle.dataValidLevel = _IADC_SINGLEFIFOCFG_DVL_VALID1;
 
 	  // Set conversions to run continuously
-	//  initSingle.triggerAction = iadcTriggerActionContinuous;
+	  // initSingle.triggerAction = iadcTriggerActionContinuous;
 
 	  // Set alignment to right justified with 16 bits for data field
-	//  initSingle.alignment = iadcAlignRight16;
+	  // initSingle.alignment = iadcAlignRight16;
 
 	  // Configure Input sources for single ended conversion
 	  initSingleInput.posInput = iadcPosInputPortCPin5;
@@ -101,17 +100,20 @@ uint32_t LightSensor_AdcPollingRead(void)
 {
 	emberEventControlSetInactive(readValueSensorLightControl);
 	IADC_Result_t iadcResult;
+
 	// Start IADC conversion
 	IADC_command(IADC0, iadcCmdStartSingle);
 
 	// Wait for conversion to be complete
 	while((IADC0->STATUS & (_IADC_STATUS_CONVERTING_MASK
-				| _IADC_STATUS_SINGLEFIFODV_MASK)) != IADC_STATUS_SINGLEFIFODV); //while combined status bits 8 & 6 don't equal 1 and 0 respectively
+				| _IADC_STATUS_SINGLEFIFODV_MASK)) != IADC_STATUS_SINGLEFIFODV);
+	//while combined status bits 8 & 6 don't equal 1 and 0 respectively
 
 	// Get ADC result
 	iadcResult = IADC_pullSingleFifoResult(IADC0);
 	valueADC = iadcResult.data;
 	kalman_Light = Kalman_sensor(valueADC);
+
 	// Calculate input voltage:
 	//  For differential inputs, the resultant range is from -Vref to +Vref, i.e.,
 	//  for Vref = AVDD = 3.30V, 12 bits represents 6.60V full scale IADC range.

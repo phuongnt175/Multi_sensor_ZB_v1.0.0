@@ -32,11 +32,11 @@ void initI2C(void)
 
   // Route I2C pins to GPIO
   GPIO->I2CROUTE[0].SDAROUTE = (GPIO->I2CROUTE[0].SDAROUTE & ~_GPIO_I2C_SDAROUTE_MASK)
-                        | (I2C_GPIO << _GPIO_I2C_SDAROUTE_PORT_SHIFT
-                        | (I2C0_PIN_SDA << _GPIO_I2C_SDAROUTE_PIN_SHIFT));
+								| (I2C_GPIO << _GPIO_I2C_SDAROUTE_PORT_SHIFT
+								| (I2C0_PIN_SDA << _GPIO_I2C_SDAROUTE_PIN_SHIFT));
   GPIO->I2CROUTE[0].SCLROUTE = (GPIO->I2CROUTE[0].SCLROUTE & ~_GPIO_I2C_SCLROUTE_MASK)
-                        | (I2C_GPIO << _GPIO_I2C_SCLROUTE_PORT_SHIFT
-                        | (I2C0_PIN_SCL << _GPIO_I2C_SCLROUTE_PIN_SHIFT));
+								| (I2C_GPIO << _GPIO_I2C_SCLROUTE_PORT_SHIFT
+								| (I2C0_PIN_SCL << _GPIO_I2C_SCLROUTE_PIN_SHIFT));
   GPIO->I2CROUTE[0].ROUTEEN = GPIO_I2C_ROUTEEN_SDAPEN | GPIO_I2C_ROUTEEN_SCLPEN;
 
   // Initialize the I2C
@@ -59,13 +59,13 @@ void Si7020_Init (void){
 	uint8_t                    i2c_read_data[3];	// detect ID: SI7020_DEVICE_ID  and checksum byte
 	uint8_t                    i2c_write_data[2];	// command Electronic ID 2nd Byte
 
-
-
 	seq.addr  = SI7020_ADDR << 1 ;  			//(Address Si7020: 0x40 << 1 for bit R/W)
 	seq.flags = I2C_FLAG_WRITE_READ;
+
 	/* Select command to issue */
 	i2c_write_data[0] = SI7020_READ_ID_1;
 	i2c_write_data[1] = SI7020_READ_ID_2;
+
 	seq.buf[0].data   = i2c_write_data;
 	seq.buf[0].len    = 2;
 
@@ -73,19 +73,19 @@ void Si7020_Init (void){
 	seq.buf[1].data = i2c_read_data;
 	seq.buf[1].len  = 3;
 
-	ret = I2C_TransferInit(I2C0, &seq);
 	// Sending data
+	ret = I2C_TransferInit(I2C0, &seq);
 	while (ret == i2cTransferInProgress)
 	{
 		ret = I2C_Transfer(I2C0);
 	}
 	emberAfCorePrintln (" Detect ret: %d",ret);
+
 	if ((ret != i2cTransferDone) | (i2c_read_data[0] != SI7020_DEVICE_ID)) {
-
 		emberAfCorePrintln (" Detect Si7020 failure!--Device Id:%d ",i2c_read_data[0]);
-
-	}
+	}else {
 	emberAfCorePrintln (" Detect Si7020 success! ");
+	}
 }
 
 
@@ -98,21 +98,23 @@ void Si7020_Init (void){
 boolean Si7020_Measure (uint32_t *buffer, uint8_t command, uint8_t Length_Data){
 	I2C_TransferSeq_TypeDef    seq;
 	I2C_TransferReturn_TypeDef retVal;
-	uint8_t                    i2c_read_data[Length_Data];  		//i2c_read_data[0]: MSB		i2c_read_data[1]: LSB
+	uint8_t                    i2c_read_data[Length_Data]; //i2c_read_data[0]: MSB		i2c_read_data[1]: LSB
 	uint8_t                    i2c_write_data[1];
 
 	seq.addr  = SI7020_ADDR << 1; //(Address Si7020: 0x40 << 1 for bit R/W)
 	seq.flags = I2C_FLAG_WRITE_READ;
+
 	/* Select command to issue */
 	i2c_write_data[0] = command;			// command
 	seq.buf[0].data   = i2c_write_data;
 	seq.buf[0].len    = 1;
+
 	/* Select location/length of data to be read */
 	seq.buf[1].data = i2c_read_data;
 	seq.buf[1].len  = 2;
 
-	retVal = I2C_TransferInit(I2C0, &seq);
 	// Sending data
+	retVal = I2C_TransferInit(I2C0, &seq);
 	while (retVal == i2cTransferInProgress)
 	{
 		retVal = I2C_Transfer(I2C0);
