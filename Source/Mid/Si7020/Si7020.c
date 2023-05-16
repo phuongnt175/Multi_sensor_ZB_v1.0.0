@@ -10,8 +10,6 @@
 #include "app/framework/include/af.h"
 #include "Si7020.h"
 
-
-
 /**
  * @func    initI2C
  * @brief   Initialize I2C communicate sensor
@@ -44,7 +42,6 @@ void initI2C(void)
 
   // Enable automatic STOP on NACK
   I2C0->CTRL = I2C_CTRL_AUTOSN;
-
 }
 
 /**
@@ -87,7 +84,6 @@ void Si7020_Init (void){
 	emberAfCorePrintln (" Detect Si7020 success! ");
 	}
 }
-
 
 /**
  * @func    Si7020_Measure

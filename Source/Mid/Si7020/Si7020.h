@@ -42,7 +42,6 @@
 #define SI7020_READ_ID_1       0xFC
 #define SI7020_READ_ID_2       0xC9
 
-
 void initI2C(void);
 void Si7020_Init (void);
 boolean Si7020_Measure (uint32_t *buffer, uint8_t command, uint8_t Length_Data);

@@ -11,6 +11,7 @@
 #include "Source/Mid/LDR/ldr.h"
 #include "Source/Mid/Si7020/Si7020.h"
 #include "em_chip.h"
+
 /* define ------------------------------------------------------------*/
 #define PERIOD_SCAN_SENSORLIGHT									5000 	//	ms
 #define PERIOD_SCAN_SENSORTEMHUMI								10000	//	ms
@@ -22,6 +23,7 @@ uint32_t KalmanTemp=0;
 /* Event **************************************************************/
 EmberEventControl readValueSensorLightControl;
 EmberEventControl ReadValueTempHumiControl;
+
 /*
  * * @brief Main Init
  */
@@ -35,7 +37,6 @@ void emberAfMainInitCallback(void)
 	emberEventControlSetDelayMS(readValueSensorLightControl, 1000);
 	emberEventControlSetDelayMS(ReadValueTempHumiControl,1000);
 }
-
 
 /**
  * @func   LightSensor_AdcPollingReadHandler
