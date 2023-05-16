@@ -33,12 +33,12 @@
 /******************************************************************************/
 /*                              PRIVATE DATA                                  */
 /******************************************************************************/
-uint32_t KalmanHumi=0;
-uint32_t KalmanTemp=0;
+uint32_t g_KalmanHumi=0;
+uint32_t g_KalmanTemp=0;
 
 /* Event **************************************************************/
 EmberEventControl readValueSensorLightControl;
-EmberEventControl ReadValueTempHumiControl;
+EmberEventControl readValueTempHumiControl;
 
 /******************************************************************************/
 /*                              EXPORTED DATA                                 */
@@ -58,7 +58,7 @@ void emberAfMainInitCallback(void)
 	Si7020_Init();
 	KalmanFilterInit(2, 2, 0.001); // Initialize Kalman filter
 	emberEventControlSetDelayMS(readValueSensorLightControl, 1000);
-	emberEventControlSetDelayMS(ReadValueTempHumiControl,1000);
+	emberEventControlSetDelayMS(readValueTempHumiControl, 1000);
 }
 
 /**
@@ -67,13 +67,13 @@ void emberAfMainInitCallback(void)
  * @param  None
  * @retval None
  */
-void LightSensor_AdcPollingReadHandler(void)
+void lightSensorAdcPollingReadHandler(void)
 {
 	uint32_t lux;
 	emberEventControlSetInactive(readValueSensorLightControl);
 	lux = LightSensor_AdcPollingRead();
 	emberAfCorePrintln("Light:   %d lux         ",lux);
-	emberEventControlSetDelayMS(readValueSensorLightControl,PERIOD_SCAN_SENSORLIGHT);
+	emberEventControlSetDelayMS(readValueSensorLightControl, PERIOD_SCAN_SENSORLIGHT);
 }
 
 /**
@@ -82,13 +82,13 @@ void LightSensor_AdcPollingReadHandler(void)
  * @param   None
  * @retval  None
  */
-void ReadValueTempHumiHandler(void)
+void readValueTempHumiHandler(void)
 {
-	emberEventControlSetInactive(ReadValueTempHumiControl);
-	KalmanHumi = Si7020_MeasureHumi();
-	KalmanTemp = Si7020_MeasureTemp();
-	emberAfCorePrintln("Humi:    %d RH       Temp:     %d oC        ", KalmanHumi,KalmanTemp);
-	emberEventControlSetDelayMS(ReadValueTempHumiControl,PERIOD_SCAN_SENSORTEMHUMI);
+	emberEventControlSetInactive(readValueTempHumiControl);
+	g_KalmanHumi = Si7020_MeasureHumi();
+	g_KalmanTemp = Si7020_MeasureTemp();
+	emberAfCorePrintln("Humi:    %d RH       Temp:     %d oC        ", g_KalmanHumi, g_KalmanTemp);
+	emberEventControlSetDelayMS(readValueTempHumiControl, PERIOD_SCAN_SENSORTEMHUMI);
 }
 
 /******************************************************************************/

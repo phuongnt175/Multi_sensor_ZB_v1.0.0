@@ -10,8 +10,6 @@
 // Code used to configure the cluster event mechanism
 #define EMBER_AF_GENERATED_EVENT_CODE \
   EmberEventControl emberAfIdentifyClusterServerTickCallbackControl1; \
-  extern EmberEventControl readValueSensorLightControl; \
-  extern EmberEventControl ReadValueTempHumiControl; \
   extern EmberEventControl commissioningLedEventControl; \
   extern EmberEventControl emberAfPluginInterpanFragmentReceiveEventControl; \
   extern EmberEventControl emberAfPluginInterpanFragmentTransmitEventControl; \
@@ -20,8 +18,8 @@
   extern EmberEventControl emberAfPluginScanDispatchScanEventControl; \
   extern EmberEventControl emberAfPluginUpdateTcLinkKeyBeginTcLinkKeyUpdateEventControl; \
   extern EmberEventControl findingAndBindingEventControl; \
-  extern void LightSensor_AdcPollingReadHandler(void); \
-  extern void ReadValueTempHumiHandler(void); \
+  extern EmberEventControl readValueSensorLightControl; \
+  extern EmberEventControl readValueTempHumiControl; \
   extern void commissioningLedEventHandler(void); \
   extern void emberAfPluginInterpanFragmentReceiveEventHandler(void); \
   extern void emberAfPluginInterpanFragmentTransmitEventHandler(void); \
@@ -30,6 +28,8 @@
   extern void emberAfPluginScanDispatchScanEventHandler(void); \
   extern void emberAfPluginUpdateTcLinkKeyBeginTcLinkKeyUpdateEventHandler(void); \
   extern void findingAndBindingEventHandler(void); \
+  extern void lightSensorAdcPollingReadHandler(void); \
+  extern void readValueTempHumiHandler(void); \
   static void clusterTickWrapper(EmberEventControl *control, EmberAfTickFunction callback, uint8_t endpoint) \
   { \
     emberAfPushEndpointNetworkIndex(endpoint); \
@@ -43,8 +43,6 @@
 // EmberEventData structs used to populate the EmberEventData table
 #define EMBER_AF_GENERATED_EVENTS   \
   { &emberAfIdentifyClusterServerTickCallbackControl1, emberAfIdentifyClusterServerTickCallbackWrapperFunction1 }, \
-  { &readValueSensorLightControl, LightSensor_AdcPollingReadHandler }, \
-  { &ReadValueTempHumiControl, ReadValueTempHumiHandler }, \
   { &commissioningLedEventControl, commissioningLedEventHandler }, \
   { &emberAfPluginInterpanFragmentReceiveEventControl, emberAfPluginInterpanFragmentReceiveEventHandler }, \
   { &emberAfPluginInterpanFragmentTransmitEventControl, emberAfPluginInterpanFragmentTransmitEventHandler }, \
@@ -53,12 +51,12 @@
   { &emberAfPluginScanDispatchScanEventControl, emberAfPluginScanDispatchScanEventHandler }, \
   { &emberAfPluginUpdateTcLinkKeyBeginTcLinkKeyUpdateEventControl, emberAfPluginUpdateTcLinkKeyBeginTcLinkKeyUpdateEventHandler }, \
   { &findingAndBindingEventControl, findingAndBindingEventHandler }, \
+  { &readValueSensorLightControl, lightSensorAdcPollingReadHandler }, \
+  { &readValueTempHumiControl, readValueTempHumiHandler }, \
 
 
 #define EMBER_AF_GENERATED_EVENT_STRINGS   \
   "Identify Cluster Server EP 1",  \
-  "Read value sensor light control",  \
-  "Read value temp humi control",  \
   "Commissioning led event control",  \
   "Interpan Plugin FragmentReceive",  \
   "Interpan Plugin FragmentTransmit",  \
@@ -67,6 +65,8 @@
   "Scan Dispatch Plugin Scan",  \
   "Update TC Link Key Plugin BeginTcLinkKeyUpdate",  \
   "Finding and binding event control",  \
+  "Read value sensor light control",  \
+  "Read value temp humi control",  \
 
 
 // The length of the event context table used to track and retrieve cluster events

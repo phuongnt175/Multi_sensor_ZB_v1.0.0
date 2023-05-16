@@ -53,8 +53,8 @@ enable,ZDO
 {setupId:eventConfiguration
 commissioningLedEventControl,commissioningLedEventHandler
 findingAndBindingEventControl,findingAndBindingEventHandler
-readValueSensorLightControl,LightSensor_AdcPollingReadHandler
-ReadValueTempHumiControl,ReadValueTempHumiHandler
+readValueSensorLightControl,lightSensorAdcPollingReadHandler
+readValueTempHumiControl,readValueTempHumiHandler
 }
 {setupId:halOptions
 }
