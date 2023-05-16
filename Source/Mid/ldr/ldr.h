@@ -29,6 +29,8 @@
 #define IADC_INPUT_0_BUSALLOC     GPIO_CDBUSALLOC_CDEVEN0_ADC0
 
 /* Function prototypes -----------------------------------------------*/
+
 void LDRInit(void);
 uint32_t LightSensor_AdcPollingRead(void);
+
 #endif /* SOURCE_MID_LDR_LDR_H_ */

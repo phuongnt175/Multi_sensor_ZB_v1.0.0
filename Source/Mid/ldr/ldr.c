@@ -1,23 +1,50 @@
-/*
- * ldr.c
+/* File name: ldr.c
  *
- *  Created on: Feb 28, 2023
- *      Author: Admin1
- */
-
-
+ * Description:
+ *
+ *
+ * Last Changed By:  $Author: $
+ * Revision:         $Revision: $
+ * Last Changed:     $Date: $May 16, 2023
+ *
+ * Code sample:
+ ******************************************************************************/
+/******************************************************************************/
+/*                              INCLUDE FILES                                 */
+/******************************************************************************/
 #include "app/framework/include/af.h"
 #include <math.h>
-#include "ldr.h"
 #include "Source/Mid/kalman_filter/kalman_filter.h"
+#include "ldr.h"
+
+/******************************************************************************/
+/*                     PRIVATE TYPES and DEFINITIONS                         */
+/******************************************************************************/
+
+
+/******************************************************************************/
+/*                     EXPORTED TYPES and DEFINITIONS                         */
+/******************************************************************************/
+
+
+/******************************************************************************/
+/*                              PRIVATE DATA                                  */
+/******************************************************************************/
 
 EmberEventControl readValueSensorLightControl;
 volatile uint32_t registor;
 volatile uint32_t lux = 0;
 uint32_t valueADC=0;
 uint32_t valueLDR=0.0048828125;
-uint32_t kalman_Light=0;
+uint32_t kalmanLight=0;
 
+/******************************************************************************/
+/*                              EXPORTED DATA                                 */
+/******************************************************************************/
+
+/******************************************************************************/
+/*                            PRIVATE FUNCTIONS                               */
+/******************************************************************************/
 /**
  * @func    LDRInit
  * @brief   LDR initialize
@@ -89,6 +116,9 @@ void LDRInit(void)
 	  // Allocate the analog bus for ADC0 inputs
 	  GPIO->IADC_INPUT_0_BUS |= GPIO_CDBUSALLOC_CDODD0_ADC0;  //IADC_INPUT_BUSALLOC
 }
+/******************************************************************************/
+/*                            EXPORTED FUNCTIONS                              */
+/******************************************************************************/
 
 /**
  * @func   LightSensor_AdcPollingReadHandler
@@ -112,13 +142,19 @@ uint32_t LightSensor_AdcPollingRead(void)
 	// Get ADC result
 	iadcResult = IADC_pullSingleFifoResult(IADC0);
 	valueADC = iadcResult.data;
-	kalman_Light = Kalman_sensor(valueADC);
+	kalmanLight = Kalman_sensor(valueADC);
 
 	// Calculate input voltage:
 	//  For differential inputs, the resultant range is from -Vref to +Vref, i.e.,
 	//  for Vref = AVDD = 3.30V, 12 bits represents 6.60V full scale IADC range.
-	registor= 10000*(3300 - kalman_Light)/(kalman_Light);    // registor  = 10K*ADC / (4095 -ADC)
+	registor= 10000*(3300 - kalmanLight)/(kalmanLight);    // registor  = 10K*ADC / (4095 -ADC)
 	lux = abs(316*pow(10,5)*pow(registor,-1.4));
 	return lux;
 }
+
+
+/******************************************************************************/
+
+
+
 

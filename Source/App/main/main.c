@@ -1,29 +1,52 @@
-/*
- * main.c
+ /* File name: main.c
  *
- *  Created on: Feb 28, 2023
- *      Author: admin1
- */
-
-
+ * Description:
+ *
+ *
+ * Last Changed By:  $Author: $
+ * Revision:         $Revision: $
+ * Last Changed:     $Date: $May 16, 2023
+ *
+ * Code sample:
+ ******************************************************************************/
+/******************************************************************************/
+/*                              INCLUDE FILES                                 */
+/******************************************************************************/
 #include "app/framework/include/af.h"
 #include "Source/Mid/Kalman_filter/kalman_filter.h"
 #include "Source/Mid/LDR/ldr.h"
 #include "Source/Mid/Si7020/Si7020.h"
 #include "em_chip.h"
+#include "main.h"
 
-/* define ------------------------------------------------------------*/
+/******************************************************************************/
+/*                     PRIVATE TYPES and DEFINITIONS                         */
+/******************************************************************************/
 #define PERIOD_SCAN_SENSORLIGHT									5000 	//	ms
 #define PERIOD_SCAN_SENSORTEMHUMI								10000	//	ms
 
+/******************************************************************************/
+/*                     EXPORTED TYPES and DEFINITIONS                         */
+/******************************************************************************/
+
+
+/******************************************************************************/
+/*                              PRIVATE DATA                                  */
+/******************************************************************************/
 uint32_t KalmanHumi=0;
 uint32_t KalmanTemp=0;
-/* Function prototypes -----------------------------------------------*/
 
 /* Event **************************************************************/
 EmberEventControl readValueSensorLightControl;
 EmberEventControl ReadValueTempHumiControl;
 
+/******************************************************************************/
+/*                              EXPORTED DATA                                 */
+/******************************************************************************/
+
+/******************************************************************************/
+/*                            PRIVATE FUNCTIONS                               */
+/******************************************************************************/
 /*
  * * @brief Main Init
  */
@@ -67,3 +90,10 @@ void ReadValueTempHumiHandler(void)
 	emberAfCorePrintln("Humi:    %d RH       Temp:     %d oC        ", KalmanHumi,KalmanTemp);
 	emberEventControlSetDelayMS(ReadValueTempHumiControl,PERIOD_SCAN_SENSORTEMHUMI);
 }
+
+/******************************************************************************/
+/*                            EXPORTED FUNCTIONS                              */
+/******************************************************************************/
+
+/******************************************************************************/
+
