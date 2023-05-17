@@ -77,7 +77,7 @@ void i2cInit(void)
  * @param   None
  * @retval  None
  */
-void Si7020Init (void){
+void si7020Init (void){
 	I2C_TransferSeq_TypeDef    seq;
 	I2C_TransferReturn_TypeDef ret;
 	uint8_t                    i2c_read_data[3];	// detect ID: SI7020_DEVICE_ID  and checksum byte

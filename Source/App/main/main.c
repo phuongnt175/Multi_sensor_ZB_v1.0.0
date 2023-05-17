@@ -12,6 +12,7 @@
 /******************************************************************************/
 /*                              INCLUDE FILES                                 */
 /******************************************************************************/
+
 #include "app/framework/include/af.h"
 #include "Source/Mid/Kalman_filter/kalman_filter.h"
 #include "Source/Mid/LDR/ldr.h"
@@ -22,6 +23,7 @@
 /******************************************************************************/
 /*                     PRIVATE TYPES and DEFINITIONS                         */
 /******************************************************************************/
+
 #define PERIOD_SCAN_SENSORLIGHT									5000 	//	ms
 #define PERIOD_SCAN_SENSORTEMHUMI								10000	//	ms
 
@@ -29,10 +31,10 @@
 /*                     EXPORTED TYPES and DEFINITIONS                         */
 /******************************************************************************/
 
-
 /******************************************************************************/
 /*                              PRIVATE DATA                                  */
 /******************************************************************************/
+
 uint32_t g_KalmanHumi=0;
 uint32_t g_KalmanTemp=0;
 
@@ -53,9 +55,9 @@ EmberEventControl readValueTempHumiControl;
 void emberAfMainInitCallback(void)
 {
 	emberAfCorePrintln("Main Init");
-	LDRInit();
+	ldrInit();
 	i2cInit();
-	Si7020Init();
+	si7020Init();
 	KalmanFilterInit(2, 2, 0.001); // Initialize Kalman filter
 	emberEventControlSetDelayMS(readValueSensorLightControl, 1000);
 	emberEventControlSetDelayMS(readValueTempHumiControl, 1000);
