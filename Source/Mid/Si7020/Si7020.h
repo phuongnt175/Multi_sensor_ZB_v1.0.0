@@ -42,11 +42,11 @@
 #define SI7020_READ_ID_1       0xFC
 #define SI7020_READ_ID_2       0xC9
 
-void initI2C(void);
-void Si7020_Init (void);
-boolean Si7020_Measure (uint32_t *buffer, uint8_t command, uint8_t Length_Data);
-uint32_t Si7020_MeasureHumi (void);
-uint32_t Si7020_MeasureTemp (void);
+void i2cInit(void);
+void Si7020Init (void);
+boolean Si7020Measure (uint32_t *buffer, uint8_t command, uint8_t Length_Data);
+uint32_t Si7020MeasureHumi (void);
+uint32_t Si7020MeasureTemp (void);
 /******************************************************************************/
 
 #endif /* SOURCE_MID_SI7020_SI7020_H_ */

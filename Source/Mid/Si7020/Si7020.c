@@ -12,7 +12,7 @@
 /******************************************************************************/
 /*                              INCLUDE FILES                                 */
 /******************************************************************************/
-// Transmission flags
+
 #include "app/framework/include/af.h"
 #include "Si7020.h"
 
@@ -37,14 +37,13 @@
 /******************************************************************************/
 /*                            PRIVATE FUNCTIONS                               */
 /******************************************************************************/
-
 /**
  * @func    initI2C
  * @brief   Initialize I2C communicate sensor
  * @param   None
  * @retval  None
  */
-void initI2C(void)
+void i2cInit(void)
 {
   CMU_ClockEnable(cmuClock_I2C0, true);
   CMU_ClockEnable(cmuClock_GPIO, true);
@@ -78,7 +77,7 @@ void initI2C(void)
  * @param   None
  * @retval  None
  */
-void Si7020_Init (void){
+void Si7020Init (void){
 	I2C_TransferSeq_TypeDef    seq;
 	I2C_TransferReturn_TypeDef ret;
 	uint8_t                    i2c_read_data[3];	// detect ID: SI7020_DEVICE_ID  and checksum byte
@@ -119,7 +118,7 @@ void Si7020_Init (void){
  * @param   *buffer, command
  * @retval  Retval
  */
-boolean Si7020_Measure (uint32_t *buffer, uint8_t command, uint8_t Length_Data){
+boolean Si7020Measure (uint32_t *buffer, uint8_t command, uint8_t Length_Data){
 	I2C_TransferSeq_TypeDef    seq;
 	I2C_TransferReturn_TypeDef retVal;
 	uint8_t                    i2c_read_data[Length_Data]; //i2c_read_data[0]: MSB		i2c_read_data[1]: LSB
@@ -156,12 +155,12 @@ boolean Si7020_Measure (uint32_t *buffer, uint8_t command, uint8_t Length_Data){
  * @param   *humiData
  * @retval  Humi
  */
-uint32_t Si7020_MeasureHumi (void){
-	uint32_t humiData;
-	boolean retVal = Si7020_Measure (&humiData, SI7020_READ_RH, 2);
+uint32_t Si7020MeasureHumi (void){
+	uint32_t dwHumiData;
+	boolean retVal = Si7020Measure (&dwHumiData, SI7020_READ_RH, 2);
 	if (retVal)
-		humiData = ( (((humiData) * 12500) >> 16) - 600 )/100; // Humi = ((Humi * 2500)/65536) - 6
-	return humiData;
+		dwHumiData = ( (((dwHumiData) * 12500) >> 16) - 600 )/100; // Humi = ((Humi * 2500)/65536) - 6
+	return dwHumiData;
 }
 
 /**
@@ -170,12 +169,12 @@ uint32_t Si7020_MeasureHumi (void){
  * @param   *tempData
  * @retval  Temp
  */
-uint32_t Si7020_MeasureTemp (void){
-	uint32_t tempData;
-	boolean retVal = Si7020_Measure (&tempData, SI7020_READ_TEMP, 2);
+uint32_t Si7020MeasureTemp (void){
+	uint32_t dwTempData;
+	boolean retVal = Si7020Measure (&dwTempData, SI7020_READ_TEMP, 2);
 	if (retVal)
-		tempData = ( (((tempData) * 17572) >> 16) - 4685 )/100; // Temp = ((Temp * 17572)/65536 - 46.85
-	return tempData;
+		dwTempData = ( (((dwTempData) * 17572) >> 16) - 4685 )/100; // Temp = ((Temp * 17572)/65536 - 46.85
+	return dwTempData;
 }
 
 

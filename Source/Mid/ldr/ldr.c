@@ -32,11 +32,11 @@
 /******************************************************************************/
 
 EmberEventControl readValueSensorLightControl;
-volatile uint32_t registor;
-volatile uint32_t lux = 0;
-uint32_t valueADC=0;
-uint32_t valueLDR=0.0048828125;
-uint32_t kalmanLight=0;
+volatile uint32_t g_dwRegistor;
+volatile uint32_t g_dwLux = 0;
+uint32_t g_dwValueADC = 0;
+uint32_t g_dwValueLDR = 0.0048828125;
+uint32_t g_dwKalmanLight = 0;
 
 /******************************************************************************/
 /*                              EXPORTED DATA                                 */
@@ -141,20 +141,14 @@ uint32_t LightSensor_AdcPollingRead(void)
 
 	// Get ADC result
 	iadcResult = IADC_pullSingleFifoResult(IADC0);
-	valueADC = iadcResult.data;
-	kalmanLight = Kalman_sensor(valueADC);
+	g_dwValueADC = iadcResult.data;
+	g_dwKalmanLight = Kalman_sensor(g_dwValueADC);
 
 	// Calculate input voltage:
 	//  For differential inputs, the resultant range is from -Vref to +Vref, i.e.,
 	//  for Vref = AVDD = 3.30V, 12 bits represents 6.60V full scale IADC range.
-	registor= 10000*(3300 - kalmanLight)/(kalmanLight);    // registor  = 10K*ADC / (4095 -ADC)
-	lux = abs(316*pow(10,5)*pow(registor,-1.4));
-	return lux;
+	g_dwRegistor= 10000*(3300 - g_dwKalmanLight)/(g_dwKalmanLight);    // registor  = 10K*ADC / (4095 -ADC)
+	g_dwLux = abs(316*pow(10,5)*pow(g_dwRegistor,-1.4));
+	return g_dwLux;
 }
-
-
 /******************************************************************************/
-
-
-
-

@@ -54,8 +54,8 @@ void emberAfMainInitCallback(void)
 {
 	emberAfCorePrintln("Main Init");
 	LDRInit();
-	initI2C();
-	Si7020_Init();
+	i2cInit();
+	Si7020Init();
 	KalmanFilterInit(2, 2, 0.001); // Initialize Kalman filter
 	emberEventControlSetDelayMS(readValueSensorLightControl, 1000);
 	emberEventControlSetDelayMS(readValueTempHumiControl, 1000);
@@ -69,10 +69,10 @@ void emberAfMainInitCallback(void)
  */
 void lightSensorAdcPollingReadHandler(void)
 {
-	uint32_t lux;
+	uint32_t dwLux;
 	emberEventControlSetInactive(readValueSensorLightControl);
-	lux = LightSensor_AdcPollingRead();
-	emberAfCorePrintln("Light:   %d lux         ",lux);
+	dwLux = LightSensor_AdcPollingRead();
+	emberAfCorePrintln("Light:   %d lux         ",dwLux);
 	emberEventControlSetDelayMS(readValueSensorLightControl, PERIOD_SCAN_SENSORLIGHT);
 }
 
@@ -85,8 +85,8 @@ void lightSensorAdcPollingReadHandler(void)
 void readValueTempHumiHandler(void)
 {
 	emberEventControlSetInactive(readValueTempHumiControl);
-	g_KalmanHumi = Si7020_MeasureHumi();
-	g_KalmanTemp = Si7020_MeasureTemp();
+	g_KalmanHumi = Si7020MeasureHumi();
+	g_KalmanTemp = Si7020MeasureTemp();
 	emberAfCorePrintln("Humi:    %d RH       Temp:     %d oC        ", g_KalmanHumi, g_KalmanTemp);
 	emberEventControlSetDelayMS(readValueTempHumiControl, PERIOD_SCAN_SENSORTEMHUMI);
 }
